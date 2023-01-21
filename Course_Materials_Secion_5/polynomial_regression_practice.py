@@ -65,7 +65,7 @@ df_new = new_dataset()
 
 #Create a new predicted value for the values in your new dataset based on the old dataset
 #past performance can indicate future performance lol
-df_new['pred'] = lm.predict(df_new.budget.to_frame)
+df_new['pred'] = lm.predict(df_new.budget.to_frame())
 
 
 def scatter_plot_regr(movie_data,x_lin,y_lin):
@@ -78,3 +78,21 @@ def scatter_plot_regr(movie_data,x_lin,y_lin):
 	return plt.show()
 
 
+poly_m = np.polyfit(x=movie_data.budget, y=movie_data.revenue,deg=9)
+
+x_poly = np.linspace(0,100,1000)
+y_poly = np.polyval(poly_m,x_poly)
+
+def scatter_plot_polyregr(movie_data,x_lin,y_lin):
+	plt.figure(figsize=(12,8))
+	plt.scatter(x=df.budget, y=df.revenue)
+	plt.plot(x_lin,y_lin,c='red',label='regression')
+	plt.scatter(x=df_new.budget, y=df_new.revenue)
+	plt.plot(x_poly,y_poly, label = 'Polynomial Regression | Degree = 9 (Overfit)',linestyle='--',color='Orange')
+	plt.xlabel(df.columns.values[1])
+	plt.ylabel(df.columns.values[0])
+	plt.legend(fontsize = 11, loc = 4)
+	plt.ylim(0, 150)
+	return plt.show()
+
+scatter_plot_polyregr(movie_data,x_lin,y_lin)
